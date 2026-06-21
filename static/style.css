@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+.container{
+    width: 90%;
+    margin: 40px auto 40px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+    padding: 20px 40px;
+}
+h1 {
+    color: rgb(0, 128, 0);
+}
+
+li, p{
+    font-size: 18px;
+}
+a{
+    padding: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+}
