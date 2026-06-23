@@ -10,6 +10,7 @@
             <th>ID</th>
             <th>NAME</th>
             <th>COURSE</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,35 @@
             <td>{{ student[0] }}</td>
             <td>{{ student[1] }}</td>
             <td>{{ student[2] }}</td>
+            <td>
+                <a
+                    href="{{ url_for(
+                        'student.update_student',
+                        student_id=student[0]
+                    ) }}"
+                    class="btn btn-warning btn-sm"
+                >
+                    Edit
+                </a>
+
+                <td>
+
+                    <a href="{{ url_for(
+                        'student.delete_student',
+                        student_id=student[0]
+                    ) }}"
+                    class="btn btn-danger btn-sm"
+                    
+                    onclick="return confirm(
+                        'Are you sure you want to delete this student?'
+                    )">
+
+                        Delete
+
+                    </a>
+
+                </td>
+            </td>
         </tr>
 
         {% endfor %}

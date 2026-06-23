@@ -12,7 +12,7 @@
 <div class="container mt-4">
 
     <h1 class="text-primary">
-        Bilal Flask Learning Project
+        Flask Learning Project
     </h1>
 
     <a href="{{ url_for('main.home_page') }}">
@@ -25,7 +25,34 @@
         About
     </a>
 
+    |
+
+    <a href="{{ url_for('student.students_db') }}">
+        Students
+    </a>
+
+    |
+
+    <a href="{{ url_for('student.add_student') }}" class="btn btn-outline-success btn-sm">
+        Add Student
+    </a>
+
     <hr>
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
 
     {% block content %}
     {% endblock %}

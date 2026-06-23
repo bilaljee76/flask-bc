@@ -12,7 +12,7 @@ cursor.execute(
     (name, course)
 
     VALUES
-    ('Ahmed', 'ML')
+    ('Amjad', 'HTMX')
     """
 )
 
