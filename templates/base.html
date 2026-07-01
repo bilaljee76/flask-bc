@@ -15,29 +15,34 @@
         Flask Learning Project
     </h1>
 
-    <a href="{{ url_for('main.home_page') }}">
+    <a href="{{ url_for('main.home_page') }}" class="btn btn-outline-success btn-sm">
         Home
     </a>
 
-    |
-
-    <a href="{{ url_for('main.about_page') }}">
+    <a href="{{ url_for('main.about_page') }}" class="btn btn-outline-success btn-sm">
         About
     </a>
 
-    |
-
-    <a href="{{ url_for('student.students_db') }}">
+    <a href="{{ url_for('student.students_db') }}" class="btn btn-outline-success btn-sm">
         Students
     </a>
-
-    |
 
     <a href="{{ url_for('student.add_student') }}" class="btn btn-outline-success btn-sm">
         Add Student
     </a>
 
+    <a href="{{ url_for('student.logout') }}" class="btn btn-outline-success btn-sm">
+        Logout
+    </a>
+
     <hr>
+    {% if session.get("username") %}
+
+        <h5>
+            Welcom {{ session.get("username") }}
+        </h5>
+
+    {% endif %}
 
     {% with messages = get_flashed_messages() %}
 

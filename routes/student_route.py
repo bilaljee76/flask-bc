@@ -4,6 +4,8 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import flash
+from flask import session
+from auth import login_required
 
 import sqlite3
 
@@ -43,7 +45,10 @@ def students_page():
 
 
 @student.route("/students-db")
+
+@login_required
 def students_db():
+    
     connection = sqlite3.connect(
         "students.db"
     )
@@ -70,12 +75,55 @@ def students_db():
         "/student/add",
         methods=["GET", "POST"]
         )
+
+@login_required
 def add_student():
 
     if request.method=="POST":
-        name = request.form.get("name")
-        course = request.form.get("course")
-        
+        name = request.form.get("name").strip()
+        course = request.form.get("course").strip()
+
+        if not name:
+
+            session["old_name"] = name
+            session["old_course"] = course
+
+            flash("Student name is required!")
+
+            return redirect(
+                url_for("student.add_student")
+            )
+        if len(name) < 3:
+
+            session["old_name"] = name
+            session["old_course"] = course
+
+            flash(
+                "Student name must be at least 3 characters."
+            )
+            return redirect(
+                url_for("student.add_student")
+            )
+
+        if not course:
+
+            session["old_name"] = name
+            session["old_course"] = course
+
+            flash("Student course is required!")
+            return redirect(
+                url_for("student.add_student")
+            )
+        if len(course) < 3:
+
+            session["old_name"] = name
+            session["old_course"] = course
+
+            flash("Course name must be at least 3 characters.")
+            return redirect(
+                url_for("student.add_student")
+            )
+
         connection = sqlite3.connect("students.db")
 
         cursor = connection.cursor()
@@ -94,6 +142,9 @@ def add_student():
 
         connection.close()
 
+        session.pop("old_name", None)
+        session.pop("old_course", None)
+
         flash(
             "Student Added Successfully!"
         )
@@ -110,6 +161,8 @@ def add_student():
     "/student/update/<int:student_id>",
     methods=["GET", "POST"]
 )
+
+@login_required
 def update_student(student_id):
 
     if request.method == "POST":
@@ -177,6 +230,8 @@ def update_student(student_id):
 @student.route(
     "/student/delete/<int:student_id>"
 )
+
+@login_required
 def delete_student(student_id):
 
     connection = sqlite3.connect(
@@ -199,9 +254,82 @@ def delete_student(student_id):
     connection.close()
 
     flash(
-            "Student Updated Successfully!"
+            "Student Deleted Successfully!"
         )
 
     return redirect(
         url_for("student.students_db")
+    )
+
+
+@student.route(
+    "/login",
+    methods = ["GET", "POST"]
+)
+def login():
+    if request.method == "POST":
+
+        username = request.form.get(
+            "username"
+        )
+
+        session["username"] = username
+
+        flash(
+            "Login successful!"
+        )
+
+        return redirect(
+            url_for("student.students_db")
+        )
+    
+    return render_template(
+        "login.html"
+    )
+
+@student.route("/logout")
+def logout():
+
+    session.pop(
+        "username",
+        None
+    )
+
+    flash(
+        "Logout successful!"
+    )
+
+    return redirect(
+        url_for("student.login")
+    )
+
+@student.route(
+    "/register",
+    methods=["GET", "POST"]
+)
+def register():
+
+    if request.method == "POST":
+
+        username = request.form.get(
+            "username"
+        ).strip()
+
+        email = request.form.get(
+            "email"
+        ).strip()
+
+        print(f"Username : {username}")
+        print(f"Email    : {email}")
+
+        flash(
+            "Registration Successful!"
+        )
+
+        return redirect(
+            url_for("student.register")
+        )
+
+    return render_template(
+        "register.html"
     )
